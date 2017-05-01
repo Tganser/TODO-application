@@ -5,6 +5,7 @@ $(document).ready(onReady);
 function onReady(){
   console.log('jQ sourced');
   getAllTasks();
+  getCompleteTasks();
 
   //set up event listeners
   $('#create').on('click', createATask);
@@ -103,14 +104,53 @@ function completeTask(){
   //  &#10003; unicode for checkmark
   // &#9745
   console.log('in complete task function');
+  // $('.allTasks').remove(this.parent());
   // var thistask = $(this).parent().data(ident);
   // console.log('ID FOR TASK: ' + thistask);
-  $(this).parent().addClass('completed-task');
+  // $(this).parent().addClass('completed-task');
   // console.log($(this).parent());
   // $(this).parent('.box').remove();
   // $('.box').remove();
   // $('.box').append('<span>&#9745</span>');
   // $('.completedTasks').append('<p>'+  $(this).parent().info + '<button class="delete">Delete</button></p></div>');
 
+  taskToUpdate = {
+    id : $(this).data().ident
+  };
+
+  $(this).parent().addClass('completed-task');
+
+
+  $.ajax ({
+    url: "/completeTask",
+    type: "POST",
+    data: taskToUpdate,
+    success: function(response){
+      console.log('in update route', response);
+      $(this).parent().addClass('completed-task');
+      // getAllTasks();
+    }
+  });
 
 }
+
+function getCompleteTasks(){
+
+    $.ajax ({
+      url: "/getCompleteTasks",
+      type: "GET",
+      success: function(response){
+        console.log('in get complete Tasks route', response);
+        appendCompleteTasks(response);
+      }
+    });
+    // $('.task').on('click', completeTask);
+  } //end getAllTasks
+
+  function appendCompleteTasks (responseArray){
+
+    $('.completedTasks').empty();
+    for (var i = 0; i < responseArray.length; i++) {
+      $('.completedTasks').append('<div class="task" data-ident="'+responseArray[i].id+'">  <p>'+  responseArray[i].info + ' <button class="delete" data-ident="'+responseArray[i].id+'">Delete</button></p></div>');
+    }
+  }

@@ -68,7 +68,7 @@ app.get ('/getTasks', function(req, res){
 
       } else {
         console.log('connected to db');
-        var resultSet = connection.query("SELECT * from tasks");
+        var resultSet = connection.query("SELECT * from tasks WHERE complete='N'");
 
         resultSet.on( 'row', function ( row ){
           allTasks.push ( row );
@@ -104,3 +104,49 @@ app.delete ('/deleteTask', function(req, res){
       }
         });
 });//end app.delete
+
+app.post ('/completeTask', function(req, res){
+  console.log('complete route hit' );
+
+
+    pool.connect(function( err, connection, done){
+      if ( err ){
+        console.log("we're in the error state");
+        res.send("something weird is happening here.");
+
+      } else {
+        console.log('connected to db on complete route');
+        connection.query("UPDATE tasks SET complete='Y' where id=$1;",[req.body.id]);
+
+        done();
+        res.send(200);
+      }
+        });
+});//end app.update
+
+app.get ('/getCompleteTasks', function(req, res){
+  console.log('get Complete Tasks route hit' );
+
+  var allCompleteTasks = [];
+
+    pool.connect(function( err, connection, done){
+      if ( err ){
+        console.log("we're in the error state");
+        res.send("something weird is happening here.");
+
+      } else {
+        console.log('connected to db');
+        var resultSet = connection.query("SELECT * from tasks WHERE complete='Y'");
+
+        resultSet.on( 'row', function ( row ){
+          allCompleteTasks.push ( row );
+          });
+
+        resultSet.on('end', function(){
+          done();
+        res.send(allCompleteTasks);
+      });
+
+      }
+        });
+});//end app.get

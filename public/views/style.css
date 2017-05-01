@@ -26,6 +26,13 @@ body {
   color: gray;
 }
 
+.completedTasks {
+  text-decoration: line-through;
+  color: gray;
+  margin-left: 3em;
+
+}
+
 .allTasks {
   margin-left: 3em;
 }
