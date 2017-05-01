@@ -131,7 +131,8 @@ function completeTask(){
       // getAllTasks();
     }
   });
-
+  getAllTasks();
+  getCompleteTasks();
 }
 
 function getCompleteTasks(){

@@ -116,7 +116,7 @@ app.post ('/completeTask', function(req, res){
 
       } else {
         console.log('connected to db on complete route');
-        connection.query("UPDATE tasks SET complete='Y' where id=$1;",[req.body.id]);
+        connection.query("UPDATE tasks SET complete='Y' WHERE id=$1",[req.body.id]);
 
         done();
         res.send(200);
