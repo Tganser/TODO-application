@@ -50,6 +50,8 @@ function createATask(){
     success: function(response){
       console.log('in /createTask route', response);
       console.log(response);
+      getAllTasks();
+      getCompleteTasks();
 
     }
   });
@@ -74,7 +76,7 @@ function appendTasks (responseArray){
 
   $('.allTasks').empty();
   for (var i = 0; i < responseArray.length; i++) {
-    $('.allTasks').append('<div class="task" data-ident="'+responseArray[i].id+'">  <p>'+  responseArray[i].info + ' <button class="completebutton">Complete</button> <button class="delete" data-ident="'+responseArray[i].id+'">Delete</button></p></div>');
+    $('.allTasks').append('<div class="task" data-ident="'+responseArray[i].id+'">  <p>'+  responseArray[i].info + ' <button class="completebutton" data-ident="'+responseArray[i].id+'">Complete</button> <button class="delete" data-ident="'+responseArray[i].id+'">Delete</button></p></div>');
   }
 }
 //<span class="box"> &#9744</span>
@@ -94,6 +96,7 @@ function deleteTask(){
     success: function(response){
       console.log('in delete route', response);
       getAllTasks();
+      getCompleteTasks();
     }
   });
 
@@ -104,19 +107,17 @@ function completeTask(){
   //  &#10003; unicode for checkmark
   // &#9745
   console.log('in complete task function');
-  // $('.allTasks').remove(this.parent());
-  // var thistask = $(this).parent().data(ident);
-  // console.log('ID FOR TASK: ' + thistask);
-  // $(this).parent().addClass('completed-task');
-  // console.log($(this).parent());
-  // $(this).parent('.box').remove();
-  // $('.box').remove();
-  // $('.box').append('<span>&#9745</span>');
-  // $('.completedTasks').append('<p>'+  $(this).parent().info + '<button class="delete">Delete</button></p></div>');
 
   taskToUpdate = {
     id : $(this).data().ident
   };
+
+  console.log(taskToUpdate);
+  console.log($(this).parent().data().ident);
+  console.log($(this).parent().data());
+  console.log($(this).data().ident);
+  console.log($(this).data());
+
 
   $(this).parent().addClass('completed-task');
 
@@ -128,6 +129,8 @@ function completeTask(){
     success: function(response){
       console.log('in update route', response);
       $(this).parent().addClass('completed-task');
+      getAllTasks();
+      getCompleteTasks();
       // getAllTasks();
     }
   });
@@ -145,7 +148,6 @@ function getCompleteTasks(){
         appendCompleteTasks(response);
       }
     });
-    // $('.task').on('click', completeTask);
   } //end getAllTasks
 
   function appendCompleteTasks (responseArray){

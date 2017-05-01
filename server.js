@@ -106,7 +106,7 @@ app.delete ('/deleteTask', function(req, res){
 });//end app.delete
 
 app.post ('/completeTask', function(req, res){
-  console.log('complete route hit' );
+  console.log('complete route hit',  req.body);
 
 
     pool.connect(function( err, connection, done){
@@ -116,7 +116,7 @@ app.post ('/completeTask', function(req, res){
 
       } else {
         console.log('connected to db on complete route');
-        connection.query("UPDATE tasks SET complete='Y' WHERE id=$1",[req.body.id]);
+        connection.query("UPDATE tasks SET complete='Y' WHERE id="+ req.body.id );
 
         done();
         res.send(200);
