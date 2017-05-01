@@ -14,7 +14,7 @@ function onReady(){
   $('.allTasks').on('click', '.completebutton', completeTask);
   // $('.allTasks').on('click', '.task', completeTask);
   // $('.delete').on('click', deleteTask);
-  // $('.completebutton').on('click', completeTask);
+  $('.completedTasks').on('click', '.delete', deleteTask);
 }
 
 // create a task
