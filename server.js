@@ -31,6 +31,7 @@ app.get('/', function(req, res){
   res.sendFile(path.resolve('public/views/index.html'));
 });
 
+
 app.post ('/createTask', function(req, res){
 
     console.log("task recieved from client: ", req.body.info);
@@ -81,3 +82,25 @@ app.get ('/getTasks', function(req, res){
       }
         });
 });//end app.get
+
+app.delete ('/deleteTask', function(req, res){
+  console.log('delete route hit' );
+
+
+    pool.connect(function( err, connection, done){
+      if ( err ){
+        console.log("we're in the error state");
+        res.send("something weird is happening here.");
+
+      } else {
+        console.log('connected to db on delete route');
+        connection.query("DELETE FROM tasks WHERE id=$1",[req.body.id]);
+
+        //DELETE FROM users WHERE id=1;
+        //"DELETE FROM pets WHERE id=$1", [req.params.id]);
+
+        done();
+        res.send(200);
+      }
+        });
+});//end app.delete
