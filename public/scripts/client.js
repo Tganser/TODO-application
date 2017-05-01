@@ -9,32 +9,14 @@ function onReady(){
 
   //set up event listeners
   $('#create').on('click', createATask);
-
   $('.allTasks').on('click', '.delete', deleteTask);
   $('.allTasks').on('click', '.completebutton', completeTask);
-  // $('.allTasks').on('click', '.task', completeTask);
-  // $('.delete').on('click', deleteTask);
   $('.completedTasks').on('click', '.delete', deleteTask);
 }
 
-// create a task
-//function createATask
-//input field, title, complete (checkbox?), delete (button)
-//ajax post to server
-
-//show all tasks
-//show all tasks
-//GET route to server
-
-// complete a task
-// change visual represntation of task
-//event listener for complete click
-//mute coloring
-
-//delete task
-// delete route to database
 
 
+//creates a new task in the database
 function createATask(){
   var task = $('#newTask').val();
   console.log("This is the new task: ", task);
@@ -55,12 +37,10 @@ function createATask(){
 
     }
   });
-  getAllTasks();
 }
 
-
+//get all the tasks from the database, this is called in every function as well
 function getAllTasks(){
-
   $.ajax ({
     url: "/getTasks",
     type: "GET",
@@ -69,11 +49,10 @@ function getAllTasks(){
       appendTasks(response);
     }
   });
-  // $('.task').on('click', completeTask);
 } //end getAllTasks
 
+//this brings the tasks to the DOM, called in getAllTasks()
 function appendTasks (responseArray){
-
   $('.allTasks').empty();
   for (var i = 0; i < responseArray.length; i++) {
     $('.allTasks').append('<div class="task" data-ident="'+responseArray[i].id+'">  <p>'+  responseArray[i].info + ' <button class="completebutton" data-ident="'+responseArray[i].id+'">Complete</button> <button class="delete" data-ident="'+responseArray[i].id+'">Delete</button></p></div>');
@@ -81,6 +60,7 @@ function appendTasks (responseArray){
 }
 //<span class="box"> &#9744</span>
 
+//deletes a task (from both all tasks and completed tasks sections)
 function deleteTask(){
   console.log('in delete task function');
   console.log($(this).data().ident);
@@ -99,10 +79,9 @@ function deleteTask(){
       getCompleteTasks();
     }
   });
-
 }
 
-
+//completes the task - moves it to lower section and changes coloring
 function completeTask(){
   //  &#10003; unicode for checkmark
   // &#9745
@@ -111,13 +90,12 @@ function completeTask(){
   taskToUpdate = {
     id : $(this).data().ident
   };
-
-  console.log(taskToUpdate);
-  console.log($(this).parent().data().ident);
-  console.log($(this).parent().data());
-  console.log($(this).data().ident);
-  console.log($(this).data());
-
+  //
+  // console.log(taskToUpdate);
+  // console.log($(this).parent().data().ident);
+  // console.log($(this).parent().data());
+  // console.log($(this).data().ident);
+  // console.log($(this).data());
 
   $(this).parent().addClass('completed-task');
 
@@ -131,13 +109,13 @@ function completeTask(){
       $(this).parent().addClass('completed-task');
       getAllTasks();
       getCompleteTasks();
-      // getAllTasks();
     }
   });
   getAllTasks();
   getCompleteTasks();
 }
 
+//completes task on button click
 function getCompleteTasks(){
 
     $.ajax ({
@@ -150,8 +128,9 @@ function getCompleteTasks(){
     });
   } //end getAllTasks
 
-  function appendCompleteTasks (responseArray){
 
+//brings completed tasks to the DOM
+  function appendCompleteTasks (responseArray){
     $('.completedTasks').empty();
     for (var i = 0; i < responseArray.length; i++) {
       $('.completedTasks').append('<div class="task" data-ident="'+responseArray[i].id+'">  <p>'+  responseArray[i].info + ' <button class="delete" data-ident="'+responseArray[i].id+'">Delete</button></p></div>');
